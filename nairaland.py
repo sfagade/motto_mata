@@ -14,11 +14,37 @@ def fetch_model(link_description):
         return None
 
 
+def has_sequence(link_text):
+    pos = 0
+    numbers = []
+    number = ""
+    while pos != len(link_text):
+        if link_text[pos] != " ":
+            try:
+                val = int(link_text[pos])
+                number = number + str(val)
+            except ValueError:
+                pos += 1
+                number = ""
+                continue
+        elif number != "":
+            numbers.append(number)
+            number = ""
+        else:
+            pass
+
+        pos += 1
+
+    return numbers
+
+
 base_url = "https://www.nairaland.com/autos"
 site_url = base_url
 records = []
 matches = ["toyota", "toks", "tokunbo", "auction"]
-models = ["toyota", "honda", "bmw", "lexus", "kia", "peugeot", "mercedes", "chevrolet", "range rover"]
+models = ["toyota", "honda", "bmw", "lexus", "kia", "peugeot", "mercedes",
+          "chevrolet", "range rover", "suzuki", "dodge", "ford", "nissan",
+          "benz", "hyundai", "volks"]
 
 for page in range(1, 4, 1):
     request = requests.get(site_url,
@@ -40,15 +66,25 @@ for page in range(1, 4, 1):
         """if any(x in main_link.text.lower() for x in matches):
             print(name_link.get("name"), " -- ", main_link.text, matches) """
 
-        identified_model = fetch_model(main_link.text.lower())
-        price_list = re.findall("\d+\.\d+", main_link.text.lower())
+        identified_make = fetch_model(main_link.text.lower())
+        link_numbers = has_sequence(main_link.text+" ")
+        year = None
+        phone_number = None
+        for numb in link_numbers:
+            if len(numb) == 4:
+                year = numb
+            elif len(numb) >= 11:
+                phone_number = numb
+
+        price_list = re.findall("\d+\.\d+", main_link.text)
         if len(price_list) > 0:
             price = price_list[0]
 
-        data_row = {"record_id": link[0].get("name"), "model": identified_model,
-                    "description": main_link.text.lower(), "price": price}
+        data_row = {"record_id": link[0].get("name"), "make": identified_make, "model": " ",
+                    "year": year, "description": main_link.text.lower(), "price": price, "phone_number": phone_number}
         records.append(data_row)
         site_url = base_url + "/" + str(page)
 
 data_frame = pandas.DataFrame(records)
+# print(data_frame)
 data_frame.to_csv("test_output.csv")
