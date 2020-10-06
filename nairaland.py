@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas
 import re
+import time
 
 
 def fetch_model(link_description):
@@ -44,7 +45,7 @@ records = []
 matches = ["toyota", "toks", "tokunbo", "auction"]
 models = ["toyota", "honda", "bmw", "lexus", "kia", "peugeot", "mercedes",
           "chevrolet", "range rover", "suzuki", "dodge", "ford", "nissan",
-          "benz", "hyundai", "volks"]
+          "benz", "hyundai", "volks", "audi"]
 
 for page in range(1, 4, 1):
     request = requests.get(site_url,
@@ -85,6 +86,7 @@ for page in range(1, 4, 1):
         records.append(data_row)
         site_url = base_url + "/" + str(page)
 
+date_now = time.strftime("%m_%d_%Y_%H%M%S", time.localtime())
 data_frame = pandas.DataFrame(records)
 # print(data_frame)
-data_frame.to_csv("test_output.csv")
+data_frame.to_csv("~/Documents/scrape_"+date_now+"_output.csv")
