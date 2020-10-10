@@ -45,7 +45,8 @@ records = []
 matches = ["toyota", "toks", "tokunbo", "auction"]
 models = ["toyota", "honda", "bmw", "lexus", "kia", "peugeot", "mercedes",
           "chevrolet", "range rover", "suzuki", "dodge", "ford", "nissan",
-          "benz", "hyundai", "volks", "audi"]
+          "benz", "hyundai", "volks", "audi", "infiniti", "rolls royce",
+          "mazda", "land rover", "infinity"]
 
 for page in range(1, 4, 1):
     request = requests.get(site_url,
@@ -68,7 +69,7 @@ for page in range(1, 4, 1):
             print(name_link.get("name"), " -- ", main_link.text, matches) """
 
         identified_make = fetch_model(main_link.text.lower())
-        link_numbers = has_sequence(main_link.text+" ")
+        link_numbers = has_sequence(main_link.text + " ")
         year = None
         phone_number = None
         for numb in link_numbers:
@@ -81,12 +82,14 @@ for page in range(1, 4, 1):
         if len(price_list) > 0:
             price = price_list[0]
 
-        data_row = {"record_id": link[0].get("name"), "make": identified_make, "model": " ",
-                    "year": year, "description": main_link.text.lower(), "price": price, "phone_number": phone_number}
-        records.append(data_row)
-        site_url = base_url + "/" + str(page)
+        if link[0].get("name"):
+            data_row = {"record_id": link[0].get("name"), "make": identified_make, "model": " ",
+                        "year": year, "description": main_link.text.lower(), "price": price,
+                        "phone_number": phone_number}
+            records.append(data_row)
+        site_url = base_url + "/" + str(page)  # ensures we will be navigating to the next page on our next iteration
 
 date_now = time.strftime("%m_%d_%Y_%H%M%S", time.localtime())
 data_frame = pandas.DataFrame(records)
 # print(data_frame)
-data_frame.to_csv("~/Documents/scrape_"+date_now+"_output.csv")
+data_frame.to_csv("~/Documents/scraped_data/scrape_" + date_now + "_output.csv")
