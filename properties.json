@@ -1,0 +1,35 @@
+{
+  "sites": {
+    "auto": "https://www.nairaland.com/autos"
+  },
+  "vehicle_makes": [
+    "toyota",
+    "honda",
+    "bmw",
+    "lexus",
+    "kia",
+    "peugeot",
+    "mercedes",
+    "chevrolet",
+    "range rover",
+    "suzuki",
+    "dodge",
+    "ford",
+    "nissan",
+    "benz",
+    "hyundai",
+    "volks",
+    "audi",
+    "infiniti",
+    "rolls royce",
+    "mazda",
+    "land rover",
+    "infinity"
+  ],
+  "matches": [
+    "toyota",
+    "toks",
+    "tokunbo",
+    "auction"
+  ]
+}
