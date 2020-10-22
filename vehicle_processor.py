@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import pandas
 import re
 import time
-from app_util import fetch_model, load_properties
+from app_util import fetch_vehicle_make, load_properties, fetch_vehicle_model
 
 
 def start_processing():
@@ -26,14 +26,14 @@ def start_processing():
         for row in table_rows:
             link = row.find_all("a")
             main_link = link[1]
-            # name_link = link[0]
 
             price = '0'
 
             """if any(x in main_link.text.lower() for x in matches):
                 print(name_link.get("name"), " -- ", main_link.text, matches) """
 
-            identified_make = fetch_model(main_link.text.lower())
+            identified_make = fetch_vehicle_make(main_link.text.lower())
+            identified_model = fetch_vehicle_model(main_link.text.lower())
             # link_numbers = has_sequence(main_link.text + " ")
             link_numbers = re.findall(r"(?:[\d\.\,]{1,})", main_link.text)
             print("checking: ", main_link.text)
@@ -62,7 +62,7 @@ def start_processing():
                     price = price_list[0].replace('m', '')
 
             if link[0].get("name") and identified_make and year:
-                data_row = {"record_id": link[0].get("name"), "make": identified_make, "model": " ",
+                data_row = {"record_id": link[0].get("name"), "make": identified_make, "model": identified_model,
                             "year": year, "description": main_link.text.lower(), "price": price,
                             "phone_number": phone_number}
                 records.append(data_row)
