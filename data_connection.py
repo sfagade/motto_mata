@@ -11,7 +11,7 @@ def connect_to_db():
 
 def check_record_exist(record_name):
     db = connect_to_db()
-    record = db.vehicles.find_one({'name': record_name})
+    record = db.vehicles.find_one({'record_id': record_name})
     print("Checked record in database", record)
     if record:
         return True
