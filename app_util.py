@@ -7,11 +7,22 @@ def load_properties():
         return prop_json
 
 
-def fetch_model(link_description):
+def fetch_vehicle_make(link_description):
     """This function is used to fetch the vehicle make of the vehicle from the description string"""
     prop_json = load_properties()
     if link_description is not None:
-        for model in prop_json['vehicle_makes']:
+        for make in prop_json['vehicle_makes']:
+            if make in link_description:
+                return make
+    else:
+        return None
+
+
+def fetch_vehicle_model(link_description):
+    """This function is used to fetch the vehicle model of the vehicle from the description string"""
+    prop_json = load_properties()
+    if link_description is not None:
+        for model in prop_json['vehicle_models']:
             if model in link_description:
                 return model
     else:
