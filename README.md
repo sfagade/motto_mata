@@ -18,4 +18,4 @@ Technologies:
 </ul> 
 
 Run:
-<em>python3 app.py</em>
+<em>python3 main_processor.py</em>

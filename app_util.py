@@ -7,7 +7,7 @@ def load_properties():
         return prop_json
 
 
-def fetch_vehicle_make(link_description):
+def fetch_vehicle_make(link_description: str):
     """This function is used to fetch the vehicle make of the vehicle from the description string"""
     prop_json = load_properties()
     if link_description is not None:
@@ -18,7 +18,7 @@ def fetch_vehicle_make(link_description):
         return None
 
 
-def fetch_vehicle_model(link_description):
+def fetch_vehicle_model(link_description: str):
     """This function is used to fetch the vehicle model of the vehicle from the description string"""
     prop_json = load_properties()
     if link_description is not None:
@@ -35,7 +35,7 @@ def has_sequence(link_text):
     pos = 0
     numbers = []
     number = ""
-    while pos != len(link_text):
+    for pos in range(len(link_text)):
         if link_text[pos] != " ":
             try:
                 val = int(link_text[pos])
@@ -43,7 +43,6 @@ def has_sequence(link_text):
             except ValueError:
                 pos += 1
                 number = ""
-                continue
         elif number != "":
             numbers.append(number)
             number = ""

@@ -24,7 +24,6 @@ def start_processing():
         main_table = soup.find("table", {"id": None})
         table_rows = main_table.find_all("tr")
 
-
         for row in table_rows:
             link = row.find_all("a")
             main_link = link[1]
@@ -70,10 +69,19 @@ def start_processing():
                 views_tag = row.find("span", {"class": "s"}).find_all("b")[2]
                 post_by = row.find("span", {"class": "s"}).find("b").find("a").text
                 if not check_record_exist(link[0].get("name")):
-                    data_row = {"record_id": link[0].get("name"), "make": identified_make, "model": identified_model,
-                                "year": year, "price": price, "description": main_link.text.lower(), "url": ref_link,
-                                "views": views_tag.text, "posted_by": post_by, "phone_number": phone_number,
-                                "created_at": created_at}
+                    data_row = {
+                        "record_id": link[0].get("name"),
+                        "make": identified_make,
+                        "model": identified_model,
+                        "year": year,
+                        "price": price,
+                        "description": main_link.text.lower(),
+                        "url": ref_link,
+                        "views": views_tag.text,
+                        "posted_by": post_by,
+                        "phone_number": phone_number,
+                        "created_at": created_at
+                    }
                     save_new_record(data_row)
                 else:
                     print("Record exist in our database")
@@ -86,3 +94,7 @@ def start_processing():
     date_now = time.strftime("%m_%d_%Y_%H%M%S", time.localtime())
     data_frame.to_csv("~/Documents/scraped_data/scrape_" + date_now + "_output.csv")
     print("Total records: ", len(records))
+
+
+if __name__ == '__main__':
+    start_processing()
