@@ -57,11 +57,18 @@ def start_processing():
                 if len(price_list) > 0:
                     price = price_list[0]
             if price == '0' or price == '.':
-                # find every amount that ends with m indicating million
+                """ find every amount that ends with m indicating million
+                Sometimes users enter strings like '6months old used car'  and these will confuse the regex"""
                 price_list = re.search(r'\d{1,4}[m]', main_link.text.replace('matic', '').replace('month', ''))
                 if price_list:
                     print("trying to pick: ", price_list)
                     price = price_list[0].replace('m', '')
+
+            if price == '0' or price == '.' or price == ',':
+                price_list = re.search(r'\d{1,4}[k]', main_link.text.replace('matic', '').replace('month', ''))
+                if price_list:
+                    print("trying to pick: ", price_list)
+                    price = price_list[0].replace('k', '')
 
             data_row = {}
 
@@ -85,7 +92,7 @@ def start_processing():
                     save_new_record(data_row)
                 else:
                     print("Record exist in our database")
-
+                # I need to move this line above line 85 when I'm ready
                 records.append(data_row)
             # ensures we will be navigating to the next page on our next iteration
             site_url = prop_json['sites']['auto'] + "/" + str(page)
